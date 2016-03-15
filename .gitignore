@@ -1,0 +1,26 @@
+*.pyc
+*.pyo
+.installed.cfg
+bin
+develop-eggs
+dist
+downloads
+eggs
+parts
+src/*.egg-info
+lib
+lib64
+.idea
+.idea/vcs.xml
+/static/
+workspace.xml
+/env/
+/*.ini
+/cover/
+/ssl/
+.DS_Store
+*.DS_Store
+*.sqlite3
+
+/* also ignore all database migrations */
+entree_project/entree/migrations/*
