@@ -3,7 +3,6 @@
 .installed.cfg
 bin
 develop-eggs
-dist
 downloads
 eggs
 parts
