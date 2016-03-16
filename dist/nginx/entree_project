@@ -3,7 +3,7 @@
 #
 # sudo ln -s /etc/nginx/sites-available/entree_project /etc/nginx/sites-enabled/entree_project
 
-upstream sundial_project_server {
+upstream entree_project_server {
   # fail_timeout=0 means we always retry an upstream even if it failed
   # to return a good HTTP response (in case the Unicorn master nukes a
   # single worker for timing out).
