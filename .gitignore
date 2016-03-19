@@ -2,6 +2,7 @@
 *.pyo
 .installed.cfg
 bin
+venv
 develop-eggs
 downloads
 eggs
