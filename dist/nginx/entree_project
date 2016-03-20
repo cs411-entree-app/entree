@@ -8,7 +8,7 @@ upstream entree_project_server {
   # to return a good HTTP response (in case the Unicorn master nukes a
   # single worker for timing out).
 
-  server unix:/home/cs411/entree/dist/run/gunicorn.sock fail_timeout=0;
+  server unix:/webapps/entree/run/gunicorn.sock fail_timeout=0;
 }
 
 server {
@@ -18,15 +18,15 @@ server {
 
     client_max_body_size 4G;
 
-    access_log /home/cs411/entree/dist/logs/nginx-access.log;
-    error_log /home/cs411/entree/dist/logs/nginx-error.log;
+    access_log /webapps/entree/logs/nginx-access.log;
+    error_log /webapps/entree/logs/nginx-error.log;
 
     location /static/ {
-        alias   /home/cs411/entree/entree_project/staticfiles/;
+        alias   /webapps/entree/static/;
     }
 
     location /media/ {
-        alias   /home/cs411/entree/entree_project/media/;
+        alias   /webapps/entree/media/;
     }
 
     location / {
@@ -64,6 +64,6 @@ server {
     # Error pages
     error_page 500 502 503 504 /500.html;
     location = /500.html {
-        root /home/cs411/entree/entree_project/staticfiles/;
+        root /webapps/entree/static/;
     }
 }
