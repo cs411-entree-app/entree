@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
-from entree.models import UserProfile
+from entree.models import UserProfile, InstagramClient
 
 # Add UserProfile inline with User
 admin.site.unregister(User)
@@ -26,3 +26,13 @@ class UserProfileAdmin(UserAdmin):
     ]
 
 admin.site.register(User, UserProfileAdmin)
+
+
+class InstagramClientAdmin(admin.ModelAdmin):
+    list_display = [
+        'client_id',
+        'client_secret',
+        'redirect_uri'
+    ]
+
+admin.site.register(InstagramClient, InstagramClientAdmin)
