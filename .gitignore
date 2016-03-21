@@ -21,6 +21,3 @@ workspace.xml
 .DS_Store
 *.DS_Store
 *.sqlite3
-
-/* also ignore all database migrations */
-entree_project/entree/migrations/*
