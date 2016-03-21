@@ -67,4 +67,3 @@ class InstagramClient(models.Model):
         max_length=255,
         blank=False
     )
-
