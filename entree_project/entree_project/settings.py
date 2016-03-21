@@ -101,6 +101,9 @@ else:
         }
     }
 
+# Custom login url
+LOGIN_URL = "/entree/login/"
+
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
