@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 # Global site context
 context_dict = {
-    'version': '0.0.1'
+    'version': 'v0.1'
 }
 
 
