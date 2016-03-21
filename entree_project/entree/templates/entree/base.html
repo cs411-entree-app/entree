@@ -21,7 +21,7 @@
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
 
         <!-- Custom CSS -->
-        <link href="{% static 'entree/css/entree.css' %}" rel="stylesheet">
+        <link href="{% static 'entree/css/base.css' %}" rel="stylesheet">
     {% endblock stylesheets %}
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -46,7 +46,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="{% url 'index' %}">
                     {% block brand %}Entree {{version}}{% endblock brand %}
                 </a>
             </div>
@@ -54,7 +54,7 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="#">About</a>
+                        <a href="{% url 'about' %}">About</a>
                     </li>
                     <li>
                         <a href="#">Preferences</a>
