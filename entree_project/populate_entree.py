@@ -6,12 +6,13 @@ import django
 django.setup()
 
 import argparse
-from entree.models import UserProfile
+from entree.models import UserProfile, InstagramClient
 from django.contrib.auth.models import User
 
 SUPERUSER_PASSWORD = '6sEzVx4oeD7Xct6K7y0Q'
 TEST_USER_PASSWORD = 'cs411entree'
 DEFAULT_SEARCH_RADIUS = 10  # miles
+INSTAGRAM_REDIRECT_URI = 'http://entree.noip.me/entree/insta/auth/'
 
 
 def populate():
@@ -37,6 +38,10 @@ def populate():
         first_name="Test",
         last_name="User"
     )
+
+    # store Instagram client information in the database
+    print('Creating Instagram API client...')
+    add_instagram_client()
 
 
 def summarize():
@@ -77,6 +82,18 @@ def add_user(username, first_name, last_name):
     profile.save()
 
 
+def add_instagram_client():
+    # get the client ID and secret key from environment variables
+    client_id = os.environ['CLIENT_ID']
+    client_secret = os.environ['CLIENT_SECRET']
+    client = InstagramClient(
+        client_id=client_id,
+        client_secret=client_secret,
+        redirect_uri=INSTAGRAM_REDIRECT_URI
+    )
+    client.save()
+
+
 def generate_email(username):
     return username + "@entree.com"
 
@@ -88,13 +105,9 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Populates the Entree database with test data.')
     args = vars(parser.parse_args())
 
-    print("=" * 80)
-    print("STARTING ENTREE DATABASE POPULATION SCRIPT")
-    print("=" * 80)
+    print('Populating Entree database...')
 
     populate()
     summarize()
 
-    print("=" * 80)
-    print("ENTREE DATABASE POPULATION COMPLETE")
-    print("=" * 80)
+    print('Database population complete.')
