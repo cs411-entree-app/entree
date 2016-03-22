@@ -35,7 +35,9 @@ def login(request):
                     instagram = InstagramClient.objects.get(pk=1)
                     client_id = instagram.client_id
                     redirect_uri = instagram.redirect_uri
-                    uri = 'https://api.instagram.com/oauth/authorize/?response_type=code'
+                    uri = 'https://api.instagram.com/oauth/authorize/?'
+                    uri += 'response_type=code'
+                    uri += 'scope=public_content'
                     uri += '&client_id=' + requests.utils.quote(client_id, safe='')
                     uri += '&redirect_uri=' + requests.utils.quote(redirect_uri, safe='')
                     return redirect(uri, context_dict)
