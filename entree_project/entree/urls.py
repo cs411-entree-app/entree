@@ -6,6 +6,7 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^login/', views.login, name='login'),
     url(r'^logout/', views.logout, name='logout'),
+    url(r'^insta/auth/', views.insta_auth, name='insta_auth'),
     url(r'^about/', views.about, name='about'),
     url(r'posts/', views.posts, name='posts'),
 ]
