@@ -60,7 +60,7 @@ def insta_auth(request):
         'redirect_uri': instagram.redirect_uri,
         'code': code,
     }
-    response = request.post(uri, data=post_data)
+    response = requests.post(uri, data=post_data)
     data = response.json()  # convert response body to json object
     access_token = data['access_token']
 
