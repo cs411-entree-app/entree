@@ -50,3 +50,20 @@ class UserProfile(models.Model):
     )
     '''
 
+
+class InstagramClient(models.Model):
+
+    # stores Entree's Instagram API access information securely
+
+    client_id = models.CharField(
+        max_length=32,
+        blank=False
+    )
+    client_secret = models.CharField(
+        max_length=32,
+        blank=False
+    )
+    redirect_uri = models.CharField(
+        max_length=255,
+        blank=False
+    )

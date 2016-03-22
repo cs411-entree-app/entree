@@ -56,17 +56,19 @@
                     <li>
                         <a href="{% url 'entree:about' %}">About</a>
                     </li>
-                    <li>
-                        <a href="#">Preferences</a>
-                    </li>
-                    {% if user.is_superuser %}
+                    {% if user.is_authenticated %}
                         <li>
-                            <a href="{% url 'admin:index' %}">Admin Site</a>
+                            <a href="#">Preferences</a>
+                        </li>
+                        {% if user.is_superuser %}
+                            <li>
+                                <a href="{% url 'admin:index' %}">Admin Site</a>
+                            </li>
+                        {% endif %}
+                        <li>
+                            <a href="{% url 'entree:logout' %}">Logout</a>
                         </li>
                     {% endif %}
-                    <li>
-                        <a href="#">Logout</a>
-                    </li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
