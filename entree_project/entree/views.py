@@ -22,7 +22,7 @@ def login(request):
         if user is not None:
             if user.is_active:
                 auth_login(request, user)
-
+                '''
                 # check if user has Instagram auth_token already
                 profile = UserProfile.objects.get(user=user)
 
@@ -41,7 +41,8 @@ def login(request):
                     uri += '&client_id=' + requests.utils.quote(client_id, safe='')
                     uri += '&redirect_uri=' + requests.utils.quote(redirect_uri, safe='')
                     return redirect(uri, context_dict)
-
+                '''
+                return redirect('/entree/', context_dict)
             return render(request, 'entree/login.html', context_dict)
         return render(request, 'entree/login.html', context_dict)
 
