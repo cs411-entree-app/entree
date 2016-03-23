@@ -105,6 +105,7 @@ def posts(request):
         uri += '&privacy_filter=1'
         uri += '&format=json'
         uri += '&has_geo=1'
+        uri += '&per_page=25'
 
         text = requests.get(uri).text
         # For some reason Flickr returns invalid JSON, wrapped with this bs:
