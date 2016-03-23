@@ -108,7 +108,7 @@ def posts(request):
 
         text = requests.get(uri).text
         # For some reason Flickr returns invalid JSON, wrapped with this bs:
-        text = text.replace('jsonFlickApi(', '')
+        text = text.replace('jsonFlickrApi(', '')
         text = text.replace(')', '')
         post_list = simplejson.loads(text)['photos']['photo']
         image_uri = 'https://farm{0}.staticflickr.com/{1}/{2}_{3}.jpg'
