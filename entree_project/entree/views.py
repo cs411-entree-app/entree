@@ -5,6 +5,7 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from entree.models import *
 import requests
+import simplejson
 
 # Global site context
 context_dict = {
@@ -94,7 +95,7 @@ def index(request):
 def posts(request):
 
     if request.method == 'POST':
-        city = request.POST['city']
+        city = request.POST['city'].lower()
         context_dict['search_items'] = "{0}, {1}".format(city, 'food')
         flickr = FlickrClient.objects.get(pk=1)
         uri = 'https://api.flickr.com/services/rest/?method=flickr.photos.search'
@@ -105,15 +106,18 @@ def posts(request):
         uri += '&format=json'
         uri += '&has_geo=1'
 
-        r = requests.get(uri)
-        posts = r.json()['photos']['photo']
+        text = requests.get(uri).text
+        # For some reason Flickr returns invalid JSON, wrapped with this bs:
+        text = text.replace('jsonFlickApi(', '')
+        text = text.replace(')', '')
+        post_list = simplejson.loads(text)['photos']['photo']
         image_uri = 'https://farm{0}.staticflickr.com/{1}/{2}_{3}.jpg'
 
-        for i in range(len(posts)):
-            post = posts[i]
-            posts[i]['uri'] = image_uri.format(post['farm'], post['server'], post['id'], post['secret'])
+        for i in range(len(post_list)):
+            post = post_list[i]
+            post_list[i]['uri'] = image_uri.format(post['farm'], post['server'], post['id'], post['secret'])
 
-        context_dict['posts'] = posts
+        context_dict['post_list'] = post_list
 
     else:
         print('Cannot GET this page')
