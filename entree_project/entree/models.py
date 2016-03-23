@@ -67,3 +67,16 @@ class InstagramClient(models.Model):
         max_length=255,
         blank=False
     )
+
+
+class FlickrClient(models.Model):
+
+    # stores Flickr's API Key
+    api_key = models.CharField(
+        max_length=32,
+        blank=False
+    )
+    secret_key = models.CharField(
+        max_length=16,
+        blank=False
+    )
