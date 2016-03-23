@@ -6,7 +6,7 @@ import django
 django.setup()
 
 import argparse
-from entree.models import UserProfile, InstagramClient
+from entree.models import UserProfile, InstagramClient, FlickrClient
 from django.contrib.auth.models import User
 
 SUPERUSER_PASSWORD = '6sEzVx4oeD7Xct6K7y0Q'
@@ -42,6 +42,11 @@ def populate():
     # store Instagram client information in the database
     print('Creating Instagram API client...')
     add_instagram_client()
+
+
+    # store Flickr client information in the database
+    print('Creating Flickr API Client...')
+    add_flickr_client()
 
 
 def summarize():
@@ -84,12 +89,23 @@ def add_user(username, first_name, last_name):
 
 def add_instagram_client():
     # get the client ID and secret key from environment variables
-    client_id = os.environ['CLIENT_ID']
-    client_secret = os.environ['CLIENT_SECRET']
+    client_id = os.environ['INSTA_CLIENT_ID']
+    client_secret = os.environ['INSTA_CLIENT_SECRET']
     client = InstagramClient(
         client_id=client_id,
         client_secret=client_secret,
         redirect_uri=INSTAGRAM_REDIRECT_URI
+    )
+    client.save()
+
+
+def add_flickr_client():
+    # get the API keys from environment variables
+    api_key = os.environ['FLICKR_API_KEY']
+    secret_key = os.environ['FLICKR_SECRET_KEY']
+    client = FlickrClient(
+        api_key=api_key,
+        secret_key=secret_key
     )
     client.save()
 

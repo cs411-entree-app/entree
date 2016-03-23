@@ -95,7 +95,26 @@ def posts(request):
 
     if request.method == 'POST':
         city = request.POST['city']
-        context_dict['city'] = city
+        context_dict['search_items'] = "{0}, {1}".format(city, 'food')
+        flickr = FlickrClient.objects.get(pk=1)
+        uri = 'https://api.flickr.com/services/rest/?method=flickr.photos.search'
+        uri += '&api_key=' + flickr.api_key
+        uri += '&tags=' + city + ',food'
+        uri += '&tag_mode=all'
+        uri += '&privacy_filter=1'
+        uri += '&format=json'
+        uri += '&has_geo=1'
+
+        r = requests.get(uri)
+        posts = r.json()['photos']['photo']
+        image_uri = 'https://farm{0}.staticflickr.com/{1}/{2}_{3}.jpg'
+
+        for i in range(len(posts)):
+            post = posts[i]
+            posts[i]['uri'] = image_uri.format(post['farm'], post['server'], post['id'], post['secret'])
+
+        context_dict['posts'] = posts
+
     else:
         print('Cannot GET this page')
 
