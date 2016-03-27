@@ -23,8 +23,8 @@
 
         {% for post in post_list %}
             <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 thumb">
-                <a class="thumbnail" href="#">
-                    <img class="img-responsive" src="{{post.uri}}" alt="" width="400" height="300">
+                <a class="thumbnail" href="{% url 'entree:post_detail' post.id %}">
+                    <img class="img-responsive" src="{{post.image_url}}" alt="" width="400" height="300">
                 </a>
             </div>
         {% endfor %}
