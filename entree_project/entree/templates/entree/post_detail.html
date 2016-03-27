@@ -1,0 +1,11 @@
+{% extends 'entree/base.html' %}
+
+{% load staticfiles i18n %}
+
+{% block title %}{{block.super}} | Post Detail{% endblock title %}
+
+{% block page_content %}
+    <div class="row">
+        <h2>{{photo_id}}</h2>
+    </div><!-- /.row -->
+{% endblock page_content %}

@@ -39,11 +39,6 @@ def populate():
         last_name="User"
     )
 
-    # store Instagram client information in the database
-    print('Creating Instagram API client...')
-    add_instagram_client()
-
-
     # store Flickr client information in the database
     print('Creating Flickr API Client...')
     add_flickr_client()
@@ -85,18 +80,6 @@ def add_user(username, first_name, last_name):
         search_radius=DEFAULT_SEARCH_RADIUS
     )
     profile.save()
-
-
-def add_instagram_client():
-    # get the client ID and secret key from environment variables
-    client_id = os.environ['INSTA_CLIENT_ID']
-    client_secret = os.environ['INSTA_CLIENT_SECRET']
-    client = InstagramClient(
-        client_id=client_id,
-        client_secret=client_secret,
-        redirect_uri=INSTAGRAM_REDIRECT_URI
-    )
-    client.save()
 
 
 def add_flickr_client():
