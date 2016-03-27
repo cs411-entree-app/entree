@@ -6,7 +6,7 @@ import django
 django.setup()
 
 import argparse
-from entree.models import UserProfile, InstagramClient, FlickrClient
+from entree.models import UserProfile, FlickrClient
 from django.contrib.auth.models import User
 
 SUPERUSER_PASSWORD = '6sEzVx4oeD7Xct6K7y0Q'
