@@ -54,24 +54,46 @@ def posts(request):
         # return the search items as debug info for now
         context_dict['search_items'] = "{0}, {1}".format(city, 'food')
 
-        method = 'flickr.photos.search'
-        params = {
-            'tags': city + ',food',
-            'tag_mode': 'all',              # only return photos that include all of the tags
-            'privacy_filter': 1,            # 1 = public
-            'has_geo': 1,                   # only return images that have geolocation information
-            'per_page': 25
-        }
-        url = __build_flickr_rest_url(method, params)
+        # check to see if there are results cached for this search term
+        post_list = FlickrPost.objects.filter(search_term=city)
 
-        response = simplejson.loads(__flickr_json_fix(requests.get(url).text))
-        post_list = response['photos']['photo']
-        image_url = 'https://farm{0}.staticflickr.com/{1}/{2}_{3}.jpg'
+        if not post_list:
+            print('NOT cached, fetching...')
+            # no posts have been fetched for this term recently, go out to the API
+            method = 'flickr.photos.search'
+            params = {
+                'tags': city + ',food',
+                'tag_mode': 'all',              # only return photos that include all of the tags
+                'privacy_filter': 1,            # 1 = public
+                'has_geo': 1,                   # only return images that have geolocation information
+                'per_page': 25
+            }
+            url = __build_flickr_rest_url(method, params)
 
-        for i in range(len(post_list)):
-            post = post_list[i]
-            post_list[i]['image_url'] = image_url.format(post['farm'], post['server'], post['id'], post['secret'])
+            response = simplejson.loads(__flickr_json_fix(requests.get(url).text))
+            photos = response['photos']['photo']
+            image_url = 'https://farm{0}.staticflickr.com/{1}/{2}_{3}.jpg'
+            post_list = list()
 
+            for i in range(len(photos)):
+                post = photos[i]
+                url = image_url.format(post['farm'], post['server'], post['id'], post['secret'])
+
+                # add post to database
+                flickrpost = FlickrPost(
+                    id=post['id'],
+                    secret=post['secret'],
+                    farm=post['farm'],
+                    server=post['server'],
+                    owner=post['owner'],
+                    title=post['title'],
+                    image_url=url,
+                    search_term=city
+                )
+                flickrpost.save()
+                post_list.append(flickrpost)
+
+        print('CACHED, querying database...')
         context_dict['post_list'] = post_list
 
     else:
