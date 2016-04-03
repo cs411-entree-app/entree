@@ -104,9 +104,29 @@ def posts(request):
 
 @login_required
 def post_detail(request, photo_id):
+    try:
+        post = FlickrPost.objects.get(pk=photo_id)
+        context_dict['valid_post'] = True
 
-    # get photo details
-    context_dict['photo_id'] = photo_id
+        method = 'flickr.photos.getInfo'
+        params = {
+            'photo_id': photo_id
+        }
+        url = __build_flickr_rest_url(method, params)
+
+        response = simplejson.loads(__flickr_json_fix(requests.get(url).text))
+        photo = response['photo']
+
+        if not post.latitude or not post.longitude:
+            post.latitude = float(photo['location']['latitude'])
+            post.longitude = float(photo['location']['longitude'])
+            post.save()
+
+        context_dict['post'] = post
+        context_dict['post_description'] = photo['description']['_content']
+
+    except FlickrPost.DoesNotExist:
+        context_dict['valid_post'] = False
 
     return render(request, 'entree/post_detail.html', context_dict)
 

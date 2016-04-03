@@ -6,7 +6,10 @@
 
 {% block page_content %}
     <div class="row">
-        <h2>{{photo_id}}</h2>
-        <img src="http://placehold.it/400x400">
+        <h3>{{post.title}}</h3>
+        <img src="{{post.image_url}}">
+        <p>{{post_description}}</p>
+        <h3>{{post.latitude}}</h3>
+        <h3>{{post.longitude}}</h3>
     </div><!-- /.row -->
 {% endblock page_content %}
