@@ -54,10 +54,8 @@ def posts(request):
         # return the search items as debug info for now
         context_dict['search_items'] = "{0}, {1}".format(city, 'food')
 
-        flickr = FlickrClient.objects.get(pk=1)
         method = 'flickr.photos.search'
         params = {
-            'api_key': flickr.api_key,
             'tags': city + ',food',
             'tag_mode': 'all',              # only return photos that include all of the tags
             'privacy_filter': 1,            # 1 = public
@@ -85,6 +83,7 @@ def posts(request):
 @login_required
 def post_detail(request, photo_id):
 
+    # get photo details
     context_dict['photo_id'] = photo_id
 
     return render(request, 'entree/post_detail.html', context_dict)
