@@ -12,7 +12,7 @@ FLICKR_REST_ROOT_URL = 'https://api.flickr.com/services/rest/?method='
 
 # Global site context
 context_dict = {
-    'version': 'v0.1'
+    'version': 'v1.0'
 }
 
 
