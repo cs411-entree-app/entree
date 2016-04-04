@@ -44,6 +44,7 @@ class FlickrPostAdmin(admin.ModelAdmin):
         'image_url',
         'latitude',
         'longitude',
+        'date_fetched',
     ]
     search_fields = [
         'id',

@@ -3,7 +3,9 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 from entree.models import *
+from datetime import timedelta
 import requests
 import simplejson
 
@@ -52,32 +54,44 @@ def posts(request):
     if request.method == 'POST':
         city = request.POST['city'].lower()
         # return the search items as debug info for now
-        context_dict['search_items'] = "{0}, {1}".format(city, 'food')
+        context_dict['city'] = city.title()
 
-        # check to see if there are results cached for this search term
-        post_list = FlickrPost.objects.filter(search_term=city)
+        # check if latest cached post was recent (within last day)
+        try:
+            latest_post = FlickrPost.objects.latest('date_fetched')
 
-        if not post_list:
-            print('NOT cached, fetching...')
-            # no posts have been fetched for this term recently, go out to the API
-            method = 'flickr.photos.search'
-            params = {
-                'tags': city + ',food',
-                'tag_mode': 'all',              # only return photos that include all of the tags
-                'privacy_filter': 1,            # 1 = public
-                'has_geo': 1,                   # only return images that have geolocation information
-                'per_page': 25
-            }
-            url = __build_flickr_rest_url(method, params)
+            if latest_post:
+                now = timezone.now()
+                then = now - timedelta(days=1)
+                if latest_post.date_fetched < then:
+                    # cache is expired, update with any new posts
+                    posts = __search_flickr_posts(city)
 
-            response = simplejson.loads(__flickr_json_fix(requests.get(url).text))
-            photos = response['photos']['photo']
-            image_url = 'https://farm{0}.staticflickr.com/{1}/{2}_{3}.jpg'
+                    for post in posts:
+                        if not FlickrPost.object.filter(id=post['id']).count():
+                            # post not already in database
+                            flickrpost = FlickrPost(
+                                id=post['id'],
+                                secret=post['secret'],
+                                farm=post['farm'],
+                                server=post['server'],
+                                owner=post['owner'],
+                                title=post['title'],
+                                image_url=post['url'],
+                                search_term=city
+                            )
+                            flickrpost.save()
+
+                else:
+                    # cache is up-to-date
+                    post_list = FlickrPost.objects.filter(search_term=city).order_by('date_fetched')
+
+        except FlickrPost.DoesNotExist:
+            # there are no records in the database for this search term yet
+            posts = __search_flickr_posts(city)
             post_list = list()
 
-            for i in range(len(photos)):
-                post = photos[i]
-                url = image_url.format(post['farm'], post['server'], post['id'], post['secret'])
+            for post in posts:
 
                 # add post to database
                 flickrpost = FlickrPost(
@@ -87,13 +101,12 @@ def posts(request):
                     server=post['server'],
                     owner=post['owner'],
                     title=post['title'],
-                    image_url=url,
+                    image_url=post['url'],
                     search_term=city
                 )
                 flickrpost.save()
                 post_list.append(flickrpost)
 
-        print('CACHED, querying database...')
         context_dict['post_list'] = post_list
 
     else:
@@ -108,27 +121,54 @@ def post_detail(request, photo_id):
         post = FlickrPost.objects.get(pk=photo_id)
         context_dict['valid_post'] = True
 
-        method = 'flickr.photos.getInfo'
-        params = {
-            'photo_id': photo_id
-        }
-        url = __build_flickr_rest_url(method, params)
-
-        response = simplejson.loads(__flickr_json_fix(requests.get(url).text))
-        photo = response['photo']
-
         if not post.latitude or not post.longitude:
+            photo = __get_flickr_post_info(photo_id)
             post.latitude = float(photo['location']['latitude'])
             post.longitude = float(photo['location']['longitude'])
+            post.description = photo['description']['_content']
             post.save()
 
         context_dict['post'] = post
-        context_dict['post_description'] = photo['description']['_content']
 
     except FlickrPost.DoesNotExist:
         context_dict['valid_post'] = False
 
     return render(request, 'entree/post_detail.html', context_dict)
+
+
+def __get_flickr_post_info(photo_id):
+    method = 'flickr.photos.getInfo'
+    params = {
+        'photo_id': photo_id
+    }
+    url = __build_flickr_rest_url(method, params)
+
+    response = simplejson.loads(__flickr_json_fix(requests.get(url).text))
+    return response['photo']
+
+
+def __search_flickr_posts(city):
+    method = 'flickr.photos.search'
+    params = {
+        'tags': city + ',food',
+        'tag_mode': 'all',              # only return photos that include all of the tags
+        'privacy_filter': 1,            # 1 = public
+        'has_geo': 1,                   # only return images that have geolocation information
+        'per_page': 25
+    }
+    url = __build_flickr_rest_url(method, params)
+
+    response = simplejson.loads(__flickr_json_fix(requests.get(url).text))
+    photos = response['photos']['photo']
+    image_url = 'https://farm{0}.staticflickr.com/{1}/{2}_{3}.jpg'
+    post_list = list()
+
+    for i in range(len(photos)):
+        post = photos[i]
+        post['url'] = image_url.format(post['farm'], post['server'], post['id'], post['secret'])
+        post_list.append(post)
+
+    return post_list
 
 
 def __build_flickr_rest_url(method, params):

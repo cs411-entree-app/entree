@@ -125,3 +125,6 @@ class FlickrPost(models.Model):
         null=True,
         blank=True
     )
+    description = models.TextField(
+        blank=True
+    )

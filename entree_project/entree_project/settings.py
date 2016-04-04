@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
+from django.conf.locale.en import formats as en_formats
+
+# custom date format
+en_formats.DATETIME_FORMAT = "d b Y H:i:s"
 
 # Toggle which database to use
 USE_POSTGRES = True

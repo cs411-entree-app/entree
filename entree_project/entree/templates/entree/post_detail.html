@@ -19,9 +19,11 @@
                 </div>
                 <div class="panel-body">
                     <img src="{{post.image_url}}" width="100%">
-                    <div class="post-description well">
-                        <p>{{post_description}}</p>
-                    </div>
+                    {% if post.description %}
+                        <div class="post-description well">
+                            <p>{{post.description}}</p>
+                        </div>
+                    {% endif %}
                     <dl class="dl-horizontal">
                         <dt>Latitude:</dt>
                         <dd>{{post.latitude}}</dd>
