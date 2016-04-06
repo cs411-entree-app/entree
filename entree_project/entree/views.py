@@ -68,7 +68,7 @@ def posts(request):
                     posts = __search_flickr_posts(city)
 
                     for post in posts:
-                        if not FlickrPost.object.filter(id=post['id']).count():
+                        if not FlickrPost.objects.filter(id=post['id']).count():
                             # post not already in database
                             flickrpost = FlickrPost(
                                 id=post['id'],
@@ -85,6 +85,7 @@ def posts(request):
                 else:
                     # cache is up-to-date
                     post_list = FlickrPost.objects.filter(search_term=city).order_by('date_fetched')
+                    context_dict['post_list'] = post_list
 
         except FlickrPost.DoesNotExist:
             # there are no records in the database for this search term yet
@@ -107,7 +108,8 @@ def posts(request):
                 flickrpost.save()
                 post_list.append(flickrpost)
 
-        context_dict['post_list'] = post_list
+            context_dict['post_list'] = post_list
+            print (context_dict['post_list'])
 
     else:
         return redirect('/entree/', context_dict)
