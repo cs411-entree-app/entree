@@ -58,7 +58,7 @@ def posts(request):
 
         # check if latest cached post was recent (within last day)
         try:
-            latest_post = FlickrPost.objects.latest('date_fetched')
+            latest_post = FlickrPost.objects.filter(search_term=city).latest('date_fetched')
 
             if latest_post:
                 now = timezone.now()
