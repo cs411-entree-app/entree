@@ -4,16 +4,11 @@
 
 What is Entrée?
 ---------------
-Entrée is a web app developed in CS411 at Boston University. Entrée shows you instagram posts of delicious food in your area. If you like what you see, selecting a post will give you:
+Entrée is a web app developed in CS411 at Boston University. Entrée shows you Flickr posts of delicious food in your area. If you like what you see, selecting a post will give you:
 
 * Information on the restaurant where that post was made
 * Yelp reviews for that location
 * A Google Maps view showing you where the restaurant is
-
-Recent Updates
---------------
-**[03-16-2016] cduffett**  
-Created repository; added diagrams, design documentation, and mockups.
 
 Authors
 -------

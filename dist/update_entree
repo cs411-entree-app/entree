@@ -1,0 +1,39 @@
+#!/bin/bash
+echo "Updating Entree app:"
+
+# you will need to insert the actual Flickr API key and secret key in the
+# "export Flickr Client information" section below.
+
+# Some of the commands to update the app must be executed as user "entree".
+# I packaged these in a "file" so the script's outputs still write to the
+# current user's stdout.
+sudo su entree << EOF
+cd /webapps/entree/entree/
+
+# update repository from Github
+echo "Pulling latest version from Github..."
+git pull
+
+# update static files
+echo "Updating static files..."
+source ../venv/bin/activate
+cd entree_project/
+python manage.py collectstatic --no-input
+
+# update database
+python manage.py flush --no-input
+python manage.py migrate --no-input
+
+# export Flickr Client information
+export FLICKR_API_KEY='<api_key>'
+export FLICKR_SECRET_KEY='<secret_key>'
+
+# populate the database
+python populate_entree.py
+
+# switch back to ubuntu user with root privileges
+echo "Restarting gunicorn daemon..."
+EOF
+sudo supervisorctl restart entree
+
+echo "Entree updated successfully"
