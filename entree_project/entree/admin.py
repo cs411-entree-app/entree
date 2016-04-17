@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
-from entree.models import UserProfile, FlickrClient, FlickrPost
+from entree.models import UserProfile, FlickrClient, FlickrPost, YelpClient
 
 # Add UserProfile inline with User
 admin.site.unregister(User)
@@ -54,3 +54,14 @@ class FlickrPostAdmin(admin.ModelAdmin):
     ]
 
 admin.site.register(FlickrPost, FlickrPostAdmin)
+
+
+class YelpClientAdmin(admin.ModelAdmin):
+    list_display = [
+        'consumer_key',
+        'consumer_secret',
+        'token',
+        'token_secret'
+    ]
+
+admin.site.register(YelpClient, YelpClientAdmin)

@@ -128,3 +128,26 @@ class FlickrPost(models.Model):
     description = models.TextField(
         blank=True
     )
+
+
+class YelpClient(models.Model):
+
+    """
+    Stores our Yelp API keys securely on the server.
+    """
+    consumer_key = models.CharField(
+        max_length=32,
+        blank=False
+    )
+    consumer_secret = models.CharField(
+        max_length=32,
+        blank=False
+    )
+    token = models.CharField(
+        max_length=32,
+        blank=False
+    )
+    token_secret = models.CharField(
+        max_length=32,
+        blank=False
+    )

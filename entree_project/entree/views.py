@@ -109,8 +109,6 @@ def posts(request):
                 post_list.append(flickrpost)
 
             context_dict['post_list'] = post_list
-            print (context_dict['post_list'])
-
     else:
         return redirect('/entree/', context_dict)
 
