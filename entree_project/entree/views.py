@@ -10,6 +10,7 @@ from yelp.client import Client
 from yelp.oauth1_authenticator import Oauth1Authenticator
 import requests
 import simplejson
+import html.parser
 
 
 FLICKR_REST_ROOT_URL = 'https://api.flickr.com/services/rest/?method='
@@ -125,11 +126,13 @@ def post_detail(request, photo_id):
         post = FlickrPost.objects.get(pk=photo_id)
         context_dict['valid_post'] = True
 
+        h = html.parser.HTMLParser()
+
         if not post.latitude or not post.longitude:
             photo = __get_flickr_post_info(photo_id)
             post.latitude = float(photo['location']['latitude'])
             post.longitude = float(photo['location']['longitude'])
-            post.description = photo['description']['_content']
+            post.description = h.unescape(photo['description']['_content'])
             post.save()
 
         context_dict['post'] = post
