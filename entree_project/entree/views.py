@@ -6,8 +6,11 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from entree.models import *
 from datetime import timedelta
+from yelp.client import Client
+from yelp.oauth1_authenticator import Oauth1Authenticator
 import requests
 import simplejson
+
 
 FLICKR_REST_ROOT_URL = 'https://api.flickr.com/services/rest/?method='
 
@@ -118,6 +121,7 @@ def posts(request):
 @login_required
 def post_detail(request, photo_id):
     try:
+        # get Flickr Post details
         post = FlickrPost.objects.get(pk=photo_id)
         context_dict['valid_post'] = True
 
@@ -129,6 +133,33 @@ def post_detail(request, photo_id):
             post.save()
 
         context_dict['post'] = post
+
+        # get Yelp reviews for that location
+        yelp = YelpClient.objects.get(pk=1)
+        auth = Oauth1Authenticator(
+            consumer_key=yelp.consumer_key,
+            consumer_secret=yelp.consumer_secret,
+            token=yelp.token,
+            token_secret=yelp.token_secret
+        )
+        client = Client(auth)
+        response = client.search_by_coordinates(post.latitude, post.longitude)
+
+        # most closely matches the geolocation
+        best_business = None
+        alt_businesses = list()
+
+        if response.businesses:
+            best_business = response.businesses[0]
+
+            if len(response.businesses) > 5:
+                alt_businesses = response.businesses[1:6]
+
+            elif len(response.businesses) > 1:
+                alt_businesses = response.businesses[1:]
+
+        context_dict['best_business'] = best_business
+        context_dict['alt_businesses'] = alt_businesses
 
     except FlickrPost.DoesNotExist:
         context_dict['valid_post'] = False

@@ -31,6 +31,12 @@
                         <dd>{{post.latitude}}</dd>
                         <dt>Longitude:</dt>
                         <dd>{{post.longitude}}</dd>
+                        <dt>Best Business</dt>
+                        <dd>{{best_business.name}}</dd>
+                        <dt>Others:</dt>
+                        {% for bus in alt_businesses %}
+                            <dd>{{bus.name}}</dd>
+                        {% endfor %}
                     </dl>
 
 
