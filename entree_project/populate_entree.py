@@ -6,7 +6,7 @@ import django
 django.setup()
 
 import argparse
-from entree.models import UserProfile, FlickrClient
+from entree.models import UserProfile, FlickrClient, YelpClient
 from django.contrib.auth.models import User
 
 SUPERUSER_PASSWORD = '6sEzVx4oeD7Xct6K7y0Q'
@@ -42,6 +42,10 @@ def populate():
     # store Flickr client information in the database
     print('Creating Flickr API Client...')
     add_flickr_client()
+
+    # store Yelp client information in database
+    print('Creating Yelp API Client...')
+    add_yelp_client()
 
 
 def summarize():
@@ -89,6 +93,21 @@ def add_flickr_client():
     client = FlickrClient(
         api_key=api_key,
         secret_key=secret_key
+    )
+    client.save()
+
+
+def add_yelp_client():
+    # get the API keys from environment variables
+    consumer_key = os.environ['YELP_CONSUMER_KEY']
+    consumer_secret = os.environ['YELP_CONSUMER_SECRET']
+    token = os.environ['YELP_TOKEN']
+    token_secret = os.environ['YELP_TOKEN_SECRET']
+    client = YelpClient(
+        consumer_key=consumer_key,
+        consumer_secret=consumer_secret,
+        token=token,
+        token_secret=token_secret
     )
     client.save()
 
