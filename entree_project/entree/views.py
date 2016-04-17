@@ -111,8 +111,9 @@ def posts(request):
                 )
                 flickrpost.save()
                 post_list.append(flickrpost)
+                post_list.reverse() # put in order by latest post
 
-            context_dict['post_list'] = post_list.reverse()  # put in order by latest post
+            context_dict['post_list'] = post_list
     else:
         return redirect('/entree/', context_dict)
 
