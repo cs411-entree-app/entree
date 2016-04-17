@@ -8,11 +8,12 @@
     {{block.super}}
     <!-- Custom CSS -->
     <link href="{% static 'entree/css/post_detail.css' %}" rel="stylesheet">
+
+    <!-- Mapbox CSS -->
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.17.0/mapbox-gl.css' rel='stylesheet'/>
 {% endblock stylesheets %}
 
 {% block page_content %}
-<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.17.0/mapbox-gl.js'></script>
-
     <div class="row">
 
         <!-- Flickr Post Detail panel -->
@@ -40,21 +41,13 @@
                 </div>
                 <div class="panel-body">
 
+                    <span id="lat" hidden>{{post.latitude}}</span>
+                    <span id="long" hidden>{{post.longitude}}</span>
+
                     <div id='map'></div>
-                    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.17.0/mapbox-gl.css' rel='stylesheet' />
-                    <script>
-                    mapboxgl.accessToken = 'pk.eyJ1IjoicGh5cmJvbHR6IiwiYSI6ImNpbjNuMXVvaTBjMWJ2OWtrZGMyamdwaDcifQ.Y_IZJ7YQTHS6CXfhXlwIvw';
-                    var map = new mapboxgl.Map({
-                        container: 'map', // container id
-                        style: 'mapbox://styles/mapbox/streets-v8', //stylesheet location
-                        center: [{{post.latitude}}, {{post.longitude}}], // starting position
-                        zoom:  13 // starting zoom
-                    });
-                    </script>
-                    <iframe width='100%' height='300px' frameBorder='0' src='https://api.mapbox.com/styles/v1/phyrboltz/cin3n2wmx000gahnlnghbmyx0.html?title=false&access_token=pk.eyJ1IjoicGh5cmJvbHR6IiwiYSI6ImNpbjNuMXVvaTBjMWJ2OWtrZGMyamdwaDcifQ.Y_IZJ7YQTHS6CXfhXlwIvw#15/{{post.latitude}}/{{post.longitude}}'></iframe>
 
                     <address>
-                        <strong>{{best_business.name}}</strong><br/>
+                        <strong id="business_name">{{best_business.name}}</strong><br/>
                         {% for el in best_business.location.display_address %}
                             {{el}}<br/>
                         {% endfor %}
@@ -95,3 +88,10 @@
         </div>
     </div><!-- /.row -->
 {% endblock page_content %}
+
+{% block javascript %}
+    {{block.super}}
+    <!-- Mapbox JavaScript -->
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.17.0/mapbox-gl.js'></script>
+    <script src="{% static 'entree/js/mapbox.js' %}"></script>
+{% endblock javascript %}
