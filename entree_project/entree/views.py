@@ -146,21 +146,28 @@ def post_detail(request, photo_id):
             token_secret=yelp.token_secret
         )
         client = Client(auth)
-        response = client.search_by_coordinates(post.latitude, post.longitude)
 
-        # most closely matches the geolocation
+        # get location that most closely matches the geolocation
         best_business = None
         alt_businesses = list()
+        yelp_api_error = False
 
-        if response.businesses:
-            best_business = response.businesses[0]
+        try:
+            response = client.search_by_coordinates(post.latitude, post.longitude)
 
-            if len(response.businesses) > 5:
-                alt_businesses = response.businesses[1:6]
+            if response.businesses:
+                best_business = response.businesses[0]
 
-            elif len(response.businesses) > 1:
-                alt_businesses = response.businesses[1:]
+                if len(response.businesses) > 5:
+                    alt_businesses = response.businesses[1:6]
 
+                elif len(response.businesses) > 1:
+                    alt_businesses = response.businesses[1:]
+
+        except:
+            yelp_api_error = True
+
+        context_dict['yelp_api_error'] = yelp_api_error
         context_dict['best_business'] = best_business
         context_dict['alt_businesses'] = alt_businesses
 

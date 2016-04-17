@@ -7,6 +7,10 @@
     border: 1px solid #eeeeee;
 }
 
+.alert {
+    margin-top: 10px;
+}
+
 dl {
     margin-top: 10px;
     margin-bottom: 0px;
