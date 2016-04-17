@@ -13,6 +13,12 @@
 {% block page_content %}
 <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.17.0/mapbox-gl.js'></script>
 
+<style>
+        #lat { }
+        #long { }
+        #map { height:300px; frameBorder:0; width:100%; }
+</style>
+
     <div class="row">
         <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">
             <div class="post-panel panel panel-default">
@@ -28,26 +34,61 @@
                     {% endif %}
                     <dl class="dl-horizontal post-geo">
                         <dt>Latitude:</dt>
-                        <dd>{{post.latitude}}</dd>
+                        <dd id="lat" value = "{{post.latitude}}">{{post.latitude}}</dd>
                         <dt>Longitude:</dt>
-                        <dd>{{post.longitude}}</dd>
+                        <dd id="long" value = "{{post.latitude}}">{{post.longitude}}</dd>
                     </dl>
 
 
                     <div id='map'></div>
                     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.17.0/mapbox-gl.css' rel='stylesheet' />
                     <script>
+
+
                     mapboxgl.accessToken = 'pk.eyJ1IjoicGh5cmJvbHR6IiwiYSI6ImNpbjNuMXVvaTBjMWJ2OWtrZGMyamdwaDcifQ.Y_IZJ7YQTHS6CXfhXlwIvw';
+                    var lat = parseFloat(document.getElementById("lat").textContent);
+                    var long = parseFloat(document.getElementById("long").textContent);
                     var map = new mapboxgl.Map({
                         container: 'map', // container id
-                        style: 'mapbox://styles/mapbox/streets-v8', //stylesheet location
-                        center: [{{post.latitude}}, {{post.longitude}}], // starting position
-                        zoom:  13 // starting zoom
+                        style: 'mapbox://styles/phyrboltz/cin3n2wmx000gahnlnghbmyx0', //stylesheet location
+                        center: [long, lat], // starting position
+                        zoom:  15 // starting zoom
                     });
+
+                    map.on('load', function () {
+                        map.addSource("markers", {
+                            "type": "geojson",
+                            "data": {
+                                "type": "FeatureCollection",
+                                "features": [{
+                                    "type": "Feature",
+                                    "geometry": {
+                                        "type": "Point",
+                                        "coordinates": [long, lat]
+                                    },
+                                    "properties": {
+                                        "title": "Yum!",
+                                        "marker-symbol": "marker"
+                                    }
+                                }]
+                            }
+                        });
+
+                        map.addLayer({
+                            "id": "markers",
+                            "type": "symbol",
+                            "source": "markers",
+                            "layout": {
+                                "icon-image": "{marker-symbol}-15",
+                                "text-field": "{title}",
+                                "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+                                "text-offset": [0, -.6],
+                                "text-anchor": "bottom"
+                            }
+                        });
+                    });
+
                     </script>
-
-
-                     <iframe width='100%' height='300px' frameBorder='0' src='https://api.mapbox.com/styles/v1/phyrboltz/cin3n2wmx000gahnlnghbmyx0.html?title=false&access_token=pk.eyJ1IjoicGh5cmJvbHR6IiwiYSI6ImNpbjNuMXVvaTBjMWJ2OWtrZGMyamdwaDcifQ.Y_IZJ7YQTHS6CXfhXlwIvw#15/{{post.latitude}}/{{post.longitude}}'></iframe>
                 </div>
             </div>
         </div>
