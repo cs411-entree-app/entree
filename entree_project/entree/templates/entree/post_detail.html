@@ -11,6 +11,8 @@
 {% endblock stylesheets %}
 
 {% block page_content %}
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.17.0/mapbox-gl.js'></script>
+
     <div class="row">
         <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">
             <div class="post-panel panel panel-default">
@@ -30,6 +32,22 @@
                         <dt>Longitude:</dt>
                         <dd>{{post.longitude}}</dd>
                     </dl>
+
+
+                    <div id='map'></div>
+                    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.17.0/mapbox-gl.css' rel='stylesheet' />
+                    <script>
+                    mapboxgl.accessToken = 'pk.eyJ1IjoicGh5cmJvbHR6IiwiYSI6ImNpbjNuMXVvaTBjMWJ2OWtrZGMyamdwaDcifQ.Y_IZJ7YQTHS6CXfhXlwIvw';
+                    var map = new mapboxgl.Map({
+                        container: 'map', // container id
+                        style: 'mapbox://styles/mapbox/streets-v8', //stylesheet location
+                        center: [{{post.latitude}}, {{post.longitude}}], // starting position
+                        zoom:  13 // starting zoom
+                    });
+                    </script>
+
+
+                     <iframe width='100%' height='300px' frameBorder='0' src='https://api.mapbox.com/styles/v1/phyrboltz/cin3n2wmx000gahnlnghbmyx0.html?title=false&access_token=pk.eyJ1IjoicGh5cmJvbHR6IiwiYSI6ImNpbjNuMXVvaTBjMWJ2OWtrZGMyamdwaDcifQ.Y_IZJ7YQTHS6CXfhXlwIvw#15/{{post.latitude}}/{{post.longitude}}'></iframe>
                 </div>
             </div>
         </div>
