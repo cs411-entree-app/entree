@@ -14,10 +14,12 @@
 <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.17.0/mapbox-gl.js'></script>
 
     <div class="row">
-        <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">
+
+        <!-- Flickr Post Detail panel -->
+        <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-0 col-md-6 col-md-offset-0 col-lg-4 col-lg-offset-0">
             <div class="post-panel panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">{{post.title}}</h3>
+                    <h3 class="panel-title">Flickr Post</h3>
                 </div>
                 <div class="panel-body">
                     <img src="{{post.image_url}}" width="100%">
@@ -26,13 +28,17 @@
                             <p>{{post.description}}</p>
                         </div>
                     {% endif %}
-                    <dl class="dl-horizontal post-geo">
-                        <dt>Latitude:</dt>
-                        <dd>{{post.latitude}}</dd>
-                        <dt>Longitude:</dt>
-                        <dd>{{post.longitude}}</dd>
-                    </dl>
+                </div>
+            </div>
+        </div>
 
+        <!-- Map and Closest Matching Business panel -->
+        <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-0 col-md-6 col-md-offset-0 col-lg-4 col-lg-offset-0">
+            <div class="post-panel panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Closest Matching Business</h3>
+                </div>
+                <div class="panel-body">
 
                     <div id='map'></div>
                     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.17.0/mapbox-gl.css' rel='stylesheet' />
@@ -45,9 +51,45 @@
                         zoom:  13 // starting zoom
                     });
                     </script>
+                    <iframe width='100%' height='300px' frameBorder='0' src='https://api.mapbox.com/styles/v1/phyrboltz/cin3n2wmx000gahnlnghbmyx0.html?title=false&access_token=pk.eyJ1IjoicGh5cmJvbHR6IiwiYSI6ImNpbjNuMXVvaTBjMWJ2OWtrZGMyamdwaDcifQ.Y_IZJ7YQTHS6CXfhXlwIvw#15/{{post.latitude}}/{{post.longitude}}'></iframe>
 
+                    <address>
+                        <strong>{{best_business.name}}</strong><br/>
+                        {% for el in best_business.location.display_address %}
+                            {{el}}<br/>
+                        {% endfor %}
+                    </address>
 
-                     <iframe width='100%' height='300px' frameBorder='0' src='https://api.mapbox.com/styles/v1/phyrboltz/cin3n2wmx000gahnlnghbmyx0.html?title=false&access_token=pk.eyJ1IjoicGh5cmJvbHR6IiwiYSI6ImNpbjNuMXVvaTBjMWJ2OWtrZGMyamdwaDcifQ.Y_IZJ7YQTHS6CXfhXlwIvw#15/{{post.latitude}}/{{post.longitude}}'></iframe>
+                    <dl>
+                        <dt>Rating</dt>
+                        <dd><img src="{{best_business.rating_img_url}}"><br></dd>
+                        <dt>Reviews</dt>
+                        <dd><a href="{{best_business.url}}" target="_blank">Go to Yelp Reviews</a></dd>
+                    </dl>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Other Nearby Businesses panel -->
+        <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-0 col-md-6 col-md-offset-0 col-lg-4 col-lg-offset-0">
+            <div class="post-panel panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Nearby Businesses</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="list-group">
+                        {% for bus in alt_businesses %}
+                            <a class="list-group-item" href="{{bus.url}}">
+                                <img src="{{bus.image_url}}" width="100px" height="100px" class="pull-right">
+                                <h5>{{bus.name}}</h5>
+                                <dl>
+                                    <dt>Rating</dt>
+                                    <dd><img src="{{bus.rating_img_url}}"></dd>
+                                </dl>
+                            </a>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>

@@ -7,6 +7,11 @@
     border: 1px solid #eeeeee;
 }
 
-.post-geo {
+dl {
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
+
+address {
     margin-top: 10px;
 }
