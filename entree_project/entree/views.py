@@ -88,7 +88,7 @@ def posts(request):
 
                 else:
                     # cache is up-to-date
-                    post_list = FlickrPost.objects.filter(search_term=city).order_by('date_fetched')
+                    post_list = FlickrPost.objects.filter(search_term=city).order_by('-date_fetched')
                     context_dict['post_list'] = post_list
 
         except FlickrPost.DoesNotExist:
