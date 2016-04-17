@@ -27,6 +27,10 @@ python manage.py migrate --no-input
 # export Flickr Client information
 export FLICKR_API_KEY='<api_key>'
 export FLICKR_SECRET_KEY='<secret_key>'
+export YELP_CONSUMER_KEY='<yelp_consumer_key>'
+export YELP_CONSUMER_SECRET='<yelp_consumer_secret>'
+export YELP_TOKEN='<yelp_token>'
+export YELP_TOKEN_SECRET='<yelp_token_secret>'
 
 # populate the database
 python populate_entree.py
