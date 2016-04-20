@@ -2,3 +2,7 @@
 .panel-search {
     margin: 100px 0;
 }
+
+.error-msg {
+    color: red;
+}

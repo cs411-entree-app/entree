@@ -49,8 +49,8 @@
                     {% if yelp_api_error %}
                         <div class="alert alert-warning">No Yelp data found for this location.</div>
                     {% else %}
+                        <h3 id="business_name">{{best_business.name}}</h3><br/>
                         <address>
-                            <strong id="business_name">{{best_business.name}}</strong><br/>
                             {% for el in best_business.location.display_address %}
                                 {{el}}<br/>
                             {% endfor %}

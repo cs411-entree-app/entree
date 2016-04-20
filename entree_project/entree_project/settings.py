@@ -19,6 +19,9 @@ en_formats.DATETIME_FORMAT = "d b Y H:i:s"
 # Toggle which database to use
 USE_POSTGRES = True
 
+# Number of search results to fetch at a time
+NUM_RESULTS = 25
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

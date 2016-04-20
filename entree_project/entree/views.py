@@ -5,6 +5,7 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from entree.models import *
+from entree_project.settings import NUM_RESULTS
 from datetime import timedelta
 from yelp.client import Client
 from yelp.oauth1_authenticator import Oauth1Authenticator
@@ -49,74 +50,54 @@ def about(request):
 
 @login_required
 def index(request):
+    if 'invalid_search' in request.GET:
+        context_dict['search_error'] = True
+    else:
+        context_dict['search_error'] = False
     return render(request, 'entree/index.html', context_dict)
 
 
 @login_required
 def posts(request):
 
-    if request.method == 'POST':
-        city = request.POST['city'].lower()
-        # return the search items as debug info for now
-        context_dict['city'] = city.title()
+    if 'city' not in request.GET:
+        return redirect('/entree/' + '?invalid_search=true', context_dict)
 
-        # check if latest cached post was recent (within last day)
-        try:
-            latest_post = FlickrPost.objects.filter(search_term=city).latest('date_fetched')
+    city = request.GET['city'].lower()
 
-            if latest_post:
-                now = timezone.now()
-                then = now - timedelta(days=1)
-                if latest_post.date_fetched < then:
-                    # cache is expired, update with any new posts
-                    posts = __search_flickr_posts(city)
+    if city == '':
+        return redirect('/entree/' + '?invalid_search=true', context_dict)
 
-                    for post in posts:
-                        if not FlickrPost.objects.filter(id=post['id']).count():
-                            # post not already in database
-                            flickrpost = FlickrPost(
-                                id=post['id'],
-                                secret=post['secret'],
-                                farm=post['farm'],
-                                server=post['server'],
-                                owner=post['owner'],
-                                title=post['title'],
-                                image_url=post['url'],
-                                search_term=city
-                            )
-                            flickrpost.save()
+    if 'page' in request.GET:
+        page = int(request.GET['page'])
 
-                else:
-                    # cache is up-to-date
-                    post_list = FlickrPost.objects.filter(search_term=city).order_by('-date_fetched')
-                    context_dict['post_list'] = post_list
-
-        except FlickrPost.DoesNotExist:
-            # there are no records in the database for this search term yet
-            posts = __search_flickr_posts(city)
-            post_list = list()
-
-            for post in posts:
-
-                # add post to database
-                flickrpost = FlickrPost(
-                    id=post['id'],
-                    secret=post['secret'],
-                    farm=post['farm'],
-                    server=post['server'],
-                    owner=post['owner'],
-                    title=post['title'],
-                    image_url=post['url'],
-                    search_term=city
-                )
-                flickrpost.save()
-                post_list.append(flickrpost)
-                post_list.reverse() # put in order by latest post
-
-            context_dict['post_list'] = post_list
+        if not page >= 1:
+            page = 1
     else:
-        return redirect('/entree/', context_dict)
+        page = 1  # start at the first page
 
+    context_dict['city'] = city.title()
+    context_dict['next_page'] = page + 1
+
+    posts = __search_flickr_posts(city, page)
+
+    for post in posts:
+        if not FlickrPost.objects.filter(id=post['id']).count():
+            # post not already in database
+            flickrpost = FlickrPost(
+                id=post['id'],
+                secret=post['secret'],
+                farm=post['farm'],
+                server=post['server'],
+                owner=post['owner'],
+                title=post['title'],
+                image_url=post['url'],
+                search_term=city,
+                page=page
+            )
+            flickrpost.save()
+
+    context_dict['post_list'] = FlickrPost.objects.filter(search_term=city).filter(page=page).order_by('-date_fetched')
     return render(request, 'entree/posts.html', context_dict)
 
 
@@ -189,14 +170,15 @@ def __get_flickr_post_info(photo_id):
     return response['photo']
 
 
-def __search_flickr_posts(city):
+def __search_flickr_posts(city, page):
     method = 'flickr.photos.search'
     params = {
         'tags': city + ',food',
         'tag_mode': 'all',              # only return photos that include all of the tags
         'privacy_filter': 1,            # 1 = public
         'has_geo': 1,                   # only return images that have geolocation information
-        'per_page': 25
+        'per_page': NUM_RESULTS,
+        'page': page
     }
     url = __build_flickr_rest_url(method, params)
 

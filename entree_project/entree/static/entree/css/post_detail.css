@@ -13,14 +13,15 @@
 
 dl {
     margin-top: 10px;
-    margin-bottom: 0px;
-}
-
-address {
-    margin-top: 10px;
+    margin-bottom: 0;
 }
 
 #map {
     width: 100%;
     height: 250px;
+}
+
+#business_name {
+    margin-top: 20px;
+    margin-bottom: 0;
 }

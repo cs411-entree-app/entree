@@ -128,6 +128,10 @@ class FlickrPost(models.Model):
     description = models.TextField(
         blank=True
     )
+    page = models.PositiveIntegerField(
+        default=1,
+        blank=False
+    )
 
 
 class YelpClient(models.Model):

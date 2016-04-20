@@ -11,18 +11,31 @@
 {% endblock stylesheets %}
 
 {% block page_content %}
-    <div class="row">
-
-        <div class="col-lg-12">
-            <h2 class="page-header">Flickr Posts for {{city}}</h2>
-        </div>
-
-        {% for post in post_list %}
-            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 thumb">
-                <a class="thumbnail" href="{% url 'entree:post_detail' post.id %}">
-                    <img class="img-responsive" src="{{post.image_url}}" alt="" width="400" height="300">
-                </a>
+    {% if post_list %}
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="page-header">Flickr Posts for {{city}}</h2>
             </div>
-        {% endfor %}
-    </div> <!-- /.row -->
+
+            {% for post in post_list %}
+                <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 thumb">
+                    <a class="thumbnail" href="{% url 'entree:post_detail' post.id %}">
+                        <img class="img-responsive" src="{{post.image_url}}" alt="" width="400" height="300">
+                    </a>
+                </div>
+            {% endfor %}
+        </div> <!-- /.row -->
+        <div class="row">
+             <hr/>
+            <div class="col-lg-12 text-center">
+                <a class="btn btn-default btn-load" href="./?city={{city}}&page={{next_page}}">Load More</a>
+            </div>
+        </div>
+    {% else %}
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h3 class="no-posts-alert">No posts found =(</h3>
+            </div>
+        </div>
+    {% endif %}
 {% endblock page_content %}

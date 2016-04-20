@@ -18,13 +18,15 @@
                     <h3 class="panel-title">Search for Food by City</h3>
                 </div>
                 <div class="panel-body">
-                    <form role="form" method="post" action="{% url 'entree:posts' %}">
-                        {% csrf_token %}
+                    <form role="form" method="get" action="{% url 'entree:posts' %}" novalidate>
                         <fieldset>
                             <div class="form-group">
                                 <input class="form-control" placeholder="city" name="city" type="text" autofocus maxlength="64">
+                                {% if search_error %}
+                                    <p class="error-msg">Invalid search term</p>
+                                {% endif %}
                             </div>
-                            <button type="submit" class="btn btn-primary" name="search">Search</button>
+                            <button type="submit" class="btn btn-primary">Search</button>
                         </fieldset>
                     </form>
                 </div>
