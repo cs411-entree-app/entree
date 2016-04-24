@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from entree.models import *
 from entree.forms import RegisterForm, EditUserForm
-from entree_project.settings import NUM_RESULTS
+from entree_project.settings import APP_VERSION, NUM_RESULTS
 from datetime import timedelta
 from yelp.client import Client
 from yelp.oauth1_authenticator import Oauth1Authenticator
@@ -20,7 +20,7 @@ FLICKR_REST_ROOT_URL = 'https://api.flickr.com/services/rest/?method='
 
 # Global site context
 context_dict = {
-    'version': 'v1.0'
+    'version': 'v' + APP_VERSION
 }
 
 

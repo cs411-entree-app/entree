@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 import os
 from django.conf.locale.en import formats as en_formats
 
+# application version
+APP_VERSION = '1.1'
+
 # custom date format
 en_formats.DATETIME_FORMAT = "d b Y H:i:s"
 
