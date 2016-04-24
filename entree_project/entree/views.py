@@ -25,6 +25,9 @@ context_dict = {
 
 def login(request):
 
+    login_failed = False
+    new_login = True
+
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -33,15 +36,14 @@ def login(request):
         if user is not None:
             if user.is_active:
                 auth_login(request, user)
-                context_dict['login_failed'] = False
+                login_failed = False
                 return redirect('/entree/', context_dict)
 
-        context_dict['login_failed'] = True
-        
-    else:
-        # got new login form
-        context_dict['login_failed'] = False
+        login_failed = True
+        new_login = False
 
+    context_dict['login_failed'] = login_failed
+    context_dict['new_login'] = new_login
     return render(request, 'entree/login.html', context_dict)
 
 
@@ -49,6 +51,11 @@ def login(request):
 def logout(request):
     auth_logout(request)
     return render(request, 'entree/login.html', context_dict)
+
+
+def register(request):
+
+    return render(request, 'entree/register.html', context_dict)
 
 
 def about(request):
