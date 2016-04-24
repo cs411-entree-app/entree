@@ -39,14 +39,20 @@
                 <dt>Username</dt>
                 <dd>{{user.username}}</dd>
 
-                <dt>First Name</dt>
-                <dd>{{user.first_name}}</dd>
+                {% if user.first_name %}
+                    <dt>First Name</dt>
+                    <dd>{{user.first_name}}</dd>
+                {% endif %}
 
-                <dt>Last Name</dt>
-                <dd>{{user.last_name}}</dd>
+                {% if user.last_name %}
+                    <dt>Last Name</dt>
+                    <dd>{{user.last_name}}</dd>
+                {% endif %}
 
-                <dt>Email</dt>
-                <dd>{{user.email}}</dd>
+                {% if user.email %}
+                    <dt>Email</dt>
+                    <dd>{{user.email}}</dd>
+                {% endif %}
             </dl>
             <a href="./?edit=true" class="btn btn-default">Edit Profile</a>
         {% endif %}
