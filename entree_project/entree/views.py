@@ -33,7 +33,14 @@ def login(request):
         if user is not None:
             if user.is_active:
                 auth_login(request, user)
+                context_dict['login_failed'] = False
                 return redirect('/entree/', context_dict)
+
+        context_dict['login_failed'] = True
+        
+    else:
+        # got new login form
+        context_dict['login_failed'] = False
 
     return render(request, 'entree/login.html', context_dict)
 
