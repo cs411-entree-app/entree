@@ -37,9 +37,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'u_$uexe5bb)om3kapawmob24o1f12d1@nx=tjn=kev4e=3%utp'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'entree.noip.me'
+]
 
 
 # Application definition

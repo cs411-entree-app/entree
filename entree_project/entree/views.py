@@ -23,6 +23,41 @@ context_dict = {
     'version': 'v' + APP_VERSION
 }
 
+def bad_request(request):
+    context_dict['status_code'] = 400
+    context_dict['status_name'] = 'Bad Request'
+    context_dict['status_description'] = "Sorry, your request could not be understood by the server."
+    response = render(request, 'error.html', context_dict)
+    response.status_code = 400
+    return response
+
+
+def permission_denied(request):
+    context_dict['status_code'] = 403
+    context_dict['status_name'] = 'Permission Denied'
+    context_dict['status_description'] = "Sorry, you do not have permission to access this page."
+    response = render(request, 'error.html', context_dict)
+    response.status_code = 403
+    return response
+
+
+def page_not_found(request):
+    context_dict['status_code'] = 404
+    context_dict['status_name'] = 'Page Not Found'
+    context_dict['status_description'] = "Sorry, the page you were trying to view does not exist."
+    response = render(request, 'error.html', context_dict)
+    response.status_code = 404
+    return response
+
+
+def server_error(request):
+    context_dict['status_code'] = 500
+    context_dict['status_name'] = 'Server Error'
+    context_dict['status_description'] = "Sorry, an error occured while processing your request."
+    response = render(request, 'error.html', context_dict)
+    response.status_code = 500
+    return response
+
 
 def login(request):
 

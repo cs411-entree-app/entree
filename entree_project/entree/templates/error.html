@@ -1,0 +1,15 @@
+{% extends 'entree/base.html' %}
+
+{% load staticfiles i18n %}
+
+{% block title %}{{block.super}} | {{status_code}}{% endblock title %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="text-center" style="margin: 100px 0;">
+            <h1>{{status_code}}</h1>
+            <h2>{{status_name}}</h2>
+            <h5>{{status_description}}</h5>
+        </div>
+    </div>
+{% endblock page_content %}
