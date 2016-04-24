@@ -70,11 +70,11 @@ def register(request):
 
             user = User(
                 username=data['username'],
-                password=data['password'],
                 first_name=data['first_name'],
                 last_name=data['last_name'],
                 email=data['email']
             )
+            user.set_password(data['password'])
             user.save()
 
             profile = UserProfile(
