@@ -59,3 +59,36 @@ class RegisterForm(forms.Form):
             'last_name',
             'email'
         )
+
+
+class EditUserForm(forms.Form):
+
+    first_name = forms.CharField(
+        label="First name:",
+        max_length=30,
+        required=False
+    )
+    last_name = forms.CharField(
+        label="Last name:",
+        max_length=30,
+        required=False
+    )
+    email = forms.EmailField(
+        label="Email:",
+        required=False
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(EditUserForm, self).__init__(*args, **kwargs)
+
+        # Crispy Forms Helper
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.form_id = "user-form"
+
+        # customize the layout
+        self.helper.layout = Layout(
+            'first_name',
+            'last_name',
+            'email'
+        )

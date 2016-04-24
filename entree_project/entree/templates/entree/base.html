@@ -50,18 +50,21 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="{% url 'entree:index' %}">
-                    {% block brand %}Entree {{version}}{% endblock brand %}
+                    {% block brand %}Entrée {{version}}{% endblock brand %}
                 </a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li>
+                        <a href="{% url 'entree:index' %}">Search</a>
+                    </li>
+                    <li>
                         <a href="{% url 'entree:about' %}">About</a>
                     </li>
                     {% if user.is_authenticated %}
                         <li>
-                            <a href="#">Preferences</a>
+                            <a href="{% url 'entree:profile' %}">Profile</a>
                         </li>
                         {% if user.is_superuser %}
                             <li>

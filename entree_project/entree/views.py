@@ -5,7 +5,7 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from entree.models import *
-from entree.forms import RegisterForm
+from entree.forms import RegisterForm, EditUserForm
 from entree_project.settings import NUM_RESULTS
 from datetime import timedelta
 from yelp.client import Client
@@ -94,6 +94,45 @@ def register(request):
 
 def about(request):
     return render(request, 'entree/about.html', context_dict)
+
+
+@login_required
+def profile(request):
+
+    user = request.user
+
+    if request.method == 'POST':
+        user_form = EditUserForm(request.POST)
+
+        if user_form.is_valid():
+            data = user_form.cleaned_data
+
+            user.first_name = data['first_name']
+            user.last_name = data['last_name']
+            user.email = data['email']
+            user.save()
+
+            return redirect('/entree/user/profile/', context_dict)
+    else:
+
+        if 'edit' in request.GET:
+            editing = True
+
+            user_form = EditUserForm(
+                initial={
+                    'first_name': user.first_name,
+                    'last_name': user.last_name,
+                    'email': user.email
+                }
+            )
+
+        else:
+            editing = False
+            user_form = None
+
+    context_dict['editing'] = editing
+    context_dict['user_form'] = user_form
+    return render(request, 'entree/profile.html', context_dict)
 
 
 @login_required

@@ -1,0 +1,12 @@
+input {
+    min-width: 200px;
+}
+
+#submit {
+    margin-top: 40px;
+    min-width: inherit;
+}
+
+.help-inline {
+    color: crimson;
+}
