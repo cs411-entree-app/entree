@@ -1,0 +1,33 @@
+{% extends 'entree/base.html' %}
+
+{% load staticfiles i18n %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}{{block.super}} | Register{% endblock title %}
+
+{% block stylesheets %}
+    {{block.super}}
+    <!-- Custom CSS -->
+    <link href="{% static 'entree/css/register.css' %}" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block page_content %}
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <div class="register-panel panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Sign Up</h3>
+            </div>
+            <form novalidate id="register-form" class="form-horizontal" method="post" action="./">
+                <div class="panel-body">
+                    {% crispy register_form %}
+                </div>
+                <div class="panel-footer">
+                    <input class="btn btn-primary" type="submit" name="Submit">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock page_content %}

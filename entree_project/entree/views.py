@@ -5,6 +5,7 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from entree.models import *
+from entree.forms import RegisterForm
 from entree_project.settings import NUM_RESULTS
 from datetime import timedelta
 from yelp.client import Client
@@ -42,6 +43,12 @@ def login(request):
         login_failed = True
         new_login = False
 
+    else:
+
+        # user redirected from registration page
+        if 'registered' in request.GET:
+            new_login = False
+
     context_dict['login_failed'] = login_failed
     context_dict['new_login'] = new_login
     return render(request, 'entree/login.html', context_dict)
@@ -50,11 +57,38 @@ def login(request):
 @login_required
 def logout(request):
     auth_logout(request)
-    return render(request, 'entree/login.html', context_dict)
+    return redirect('/entree/login/', context_dict)
 
 
 def register(request):
 
+    if request.method == 'POST':
+        register_form = RegisterForm(request.POST)
+
+        if register_form.is_valid():
+            data = register_form.cleaned_data
+
+            user = User(
+                username=data['username'],
+                password=data['password'],
+                first_name=data['first_name'],
+                last_name=data['last_name'],
+                email=data['email']
+            )
+            user.save()
+
+            profile = UserProfile(
+                user=user
+            )
+            profile.save()
+
+            context_dict['new_login'] = False
+            return redirect('/entree/login/?registered=true', context_dict)
+
+    else:
+        register_form = RegisterForm()
+
+    context_dict['register_form'] = register_form
     return render(request, 'entree/register.html', context_dict)
 
 

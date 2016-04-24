@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'entree',
+    'crispy_forms',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -157,3 +158,15 @@ STATIC_ROOT = '/webapps/entree/static/'
 STATICFILES_DIRS = (
     STATIC_PATH,
 )
+
+
+# Django Passwords Settings
+# https://github.com/dstufft/django-passwords
+
+PASSWORD_MIN_LENGTH = 8
+
+PASSWORD_COMPLEXITY = {
+    'DIGITS': 1,
+    'UPPER': 1,
+    'LOWER': 1
+}

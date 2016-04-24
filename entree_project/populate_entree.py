@@ -11,7 +11,6 @@ from django.contrib.auth.models import User
 
 SUPERUSER_PASSWORD = '6sEzVx4oeD7Xct6K7y0Q'
 TEST_USER_PASSWORD = 'cs411entree'
-DEFAULT_SEARCH_RADIUS = 10  # miles
 INSTAGRAM_REDIRECT_URI = 'http://entree.noip.me/entree/insta/auth/'
 
 
@@ -63,8 +62,7 @@ def add_superuser(username, first_name, last_name):
         last_name=last_name
     )
     profile = UserProfile(
-        user=user,
-        search_radius=DEFAULT_SEARCH_RADIUS
+        user=user
     )
     profile.save()
 
@@ -80,8 +78,7 @@ def add_user(username, first_name, last_name):
         last_name=last_name
     )
     profile = UserProfile(
-        user=user,
-        search_radius=DEFAULT_SEARCH_RADIUS
+        user=user
     )
     profile.save()
 

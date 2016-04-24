@@ -1,8 +1,8 @@
 /* for centering the search form on the index page */
 .panel-search {
-    margin: 100px 0;
+    margin: 20px 0;
 }
 
 .error-msg {
-    color: red;
+    color: crimson;
 }
