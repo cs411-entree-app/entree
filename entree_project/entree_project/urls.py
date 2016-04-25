@@ -18,12 +18,12 @@ from django.conf.urls.static import static
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.views.generic import RedirectView
-from entree.views import bad_request, permission_denied, page_not_found, server_error
+from entree import views
 
-handler404 = 'bad_request'
-handler404 = 'permission_denied'
-handler404 = 'page_not_found'
-handler500 = 'server_error'
+handler400 = 'entree.views.bad_request'
+handler403 = 'entree.views.permission_denied'
+handler404 = 'entree.views.page_not_found'
+handler500 = 'entree.views.server_error'
 
 urlpatterns = [
     url(r'^$', RedirectView.as_view(url='entree/')),
@@ -33,8 +33,8 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += [
-        url(r'^400/$', bad_request),
-        url(r'^403/$', permission_denied),
-        url(r'^404/$', page_not_found),
-        url(r'^500/$', server_error),
+        url(r'^400/$', views.bad_request),
+        url(r'^403/$', views.permission_denied),
+        url(r'^404/$', views.page_not_found),
+        url(r'^500/$', views.server_error),
     ]
